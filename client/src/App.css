@@ -1,0 +1,16 @@
+.app {
+  background-color: #fff;
+}
+
+.app-bar {
+  background-color: rgb(0, 188, 0) !important;
+}
+
+.url-input-card {
+  width: 50%;
+  margin-left: 25%;
+}
+
+.url-text-field {
+  margin: 0 16px;
+}
