@@ -22,7 +22,6 @@ router.post('/', function(req, res, next) {
   };
 
   let websiteText = "";
-  let m = "admasmd.as,md.,asm";
 
   rp(options)
   .then(($) => {
