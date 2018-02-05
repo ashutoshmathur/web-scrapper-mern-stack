@@ -6,9 +6,12 @@ const cheerio = require('cheerio');
 
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
+router.post('/', function(req, res, next) {
 	// Comment out this line:
   //res.send('respond with a resource');
+
+  const requset = req;
+  // console.log("req: ", req);
 
   // And insert something like this instead:
   const options = {
@@ -18,36 +21,24 @@ router.get('/', function(req, res, next) {
     }
   };
 
-  let mytext = "D0loresH4ze";
+  let websiteText = "";
   let m = "admasmd.as,md.,asm";
 
   rp(options)
   .then(($) => {
-    mytext = $('p').map(function(i, el) {
+    websiteText = $('p').map(function(i, el) {
       // this === el
-      return $(this).text();
-    }).get().join(' \n \n \n \n');
-    console.log(mytext);
+      return {text: $(this).text()};
+    }).get();
+    // console.log(websiteText);
 
-    res.json([{
-      id: 1,
-      username: m
-    }, {
-      id: 2,
-      username: mytext
-    }]);
+    res.json(websiteText);
   })
   .catch((err) => {
     console.log(err);
-    mytext = err;
+    websiteText = err;
     
-    res.json([{
-      id: 1,
-      username: m
-    }, {
-      id: 2,
-      username: err
-    }]);
+    res.json(websiteText);
   });
 
 });
