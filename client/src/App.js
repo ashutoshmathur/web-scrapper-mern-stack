@@ -102,7 +102,7 @@ class App extends Component {
 
           {this.state.websiteText.hasOwnProperty('error') ?       
             <Card className="url-input-card" >
-              <CardTitle title={this.state.websiteText.error.reason}/>
+              <CardTitle title={this.state.websiteText.message}/>
             </Card>
            : null}
           
