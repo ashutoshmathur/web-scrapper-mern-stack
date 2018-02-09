@@ -52,7 +52,10 @@ class App extends Component {
       // console.log(res);
       console.log(res.data);
       this.setState({ websiteText: res.data })
-    })
+    })  
+    .catch(function (error) {
+      console.log(error);
+    });
   }
 
   onSnackbarClose = () => {
@@ -64,6 +67,7 @@ class App extends Component {
   }
 
   render() {
+    console.log(" this.state.websiteText: ", this.state.websiteText.hasOwnProperty('error'))
     return (
       <MuiThemeProvider>
         <div className="app">
@@ -87,14 +91,20 @@ class App extends Component {
             </CardActions>
           </Card>
 
-          {this.state.websiteText.map((text_arr, index) =>        
+          {!this.state.websiteText.hasOwnProperty('error') ? this.state.websiteText.map((text_arr, index) =>        
             <Card  key={index}
               className="url-input-card"
             >
               <CardTitle title={text_arr.text}/>
               
             </Card>
-          )}
+          ) : null}
+
+          {this.state.websiteText.hasOwnProperty('error') ?       
+            <Card className="url-input-card" >
+              <CardTitle title={this.state.websiteText.error.reason}/>
+            </Card>
+           : null}
           
           <Snackbar
             open={this.state.showEmptyFieldWarning}
