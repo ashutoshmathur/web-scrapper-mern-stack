@@ -47,10 +47,10 @@ class App extends Component {
       url: this.state.url
     }
 
-    axios.post(`/users`, { urlData })
+    axios.post(`/siteData`, { urlData })
     .then(res => {
       // console.log(res);
-      // console.log(res.data);
+      console.log(res.data);
       this.setState({ websiteText: res.data })
     })
   }
