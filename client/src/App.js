@@ -18,7 +18,8 @@ class App extends Component {
     this.state = {
       websiteText: [],
       url: "http://www.ema.europa.eu/ema/",
-      showEmptyFieldWarning: false
+      showEmptyFieldWarning: false,
+      keywords: ["European"]
     };
     this.setURl = this.setURl.bind(this);
     this.fetchSiteData = this.fetchSiteData.bind(this);
@@ -44,7 +45,8 @@ class App extends Component {
     }
 
     let urlData = {
-      url: this.state.url
+      url: this.state.url,
+      keywords: this.state.keywords
     }
 
     axios.post(`/siteData`, { urlData })
@@ -91,25 +93,39 @@ class App extends Component {
             </CardActions>
           </Card>
 
-          {!this.state.websiteText.hasOwnProperty('error') ? this.state.websiteText.map((text_arr, index) =>
-            <Card key={index}
-              className="url-input-card"
-            >
-              <CardTitle title={"Keyword: " + text_arr.word} />
-              <CardText>{"Total Count: " + text_arr.wordCount}</CardText>
+          {(!this.state.websiteText.hasOwnProperty('error') && this.state.keywords.length > 0) ? (
+            this.state.websiteText.map((text_arr, index) =>
+              <Card key={index}
+                className="url-input-card"
+              >
+                <CardTitle title={"Keyword: " + text_arr.word} />
+                <CardText>{"Total Count: " + text_arr.wordCount}</CardText>
 
-              <CardText>{"List of texts containing this keyword: "}</CardText>
+                <CardText>{"List of texts containing this keyword: "}</CardText>
 
-              {text_arr.hasOwnProperty('texts') ? text_arr.texts.map((text, index) =>
-                <Card key={index}
-                  className="url-input-card2"
-                >
-                  <CardText>{text}</CardText>
-                </Card>
-              ) : null}
+                {text_arr.hasOwnProperty('texts') ? text_arr.texts.map((text, index) =>
+                  <Card key={index}
+                    className="url-input-card2"
+                  >
+                    <CardText>{text}</CardText>
+                  </Card>
+                ) : null}
 
-            </Card>
-          ) : null}
+              </Card>
+            )) : null}
+
+          {(!this.state.websiteText.hasOwnProperty('error') && this.state.keywords.length === 0) ? (
+            this.state.websiteText.map((text_arr, index) =>
+              <Card key={index}
+                className="url-input-card"
+              >
+                <CardText>{text_arr}</CardText>
+
+              </Card>
+            )) : null}
+
+
+
 
           {this.state.websiteText.hasOwnProperty('error') ?
             <Card className="url-input-card" >

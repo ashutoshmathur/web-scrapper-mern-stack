@@ -42,7 +42,7 @@ scrapeWebsite1 = (req, res, next) => {
 
 scrapeWebsite2 = (req, res, next) => {
   // Scrape website using ineed
-  const keywordsArray = ["European", "Medicines"]
+  const keywordsArray = req.body.urlData.keywords;
   const webURL = req.body.urlData.url;
   let textArray = [], texts = [], relevantTextArray = [], relevantTextArrayObj = {};
   ineed.collect.texts.from(webURL, function (err, response, result) {
@@ -53,45 +53,52 @@ scrapeWebsite2 = (req, res, next) => {
     textArray = result.texts;
     // res.json(textArray);
 
+    if (keywordsArray.length > 0) {
+      for (let i = 0; i < keywordsArray.length; i++) {
+        let wordCount = 0;
+        const keyword = keywordsArray[i];
+        for (let j = 0; j < textArray.length; j++) {
+          const str = textArray[j];
+          console.log("*******************************************");
+          // console.log("str", str);
+          // console.log("keyword ", keyword);
+          const wordsMap = {};
+          const wordsArray = str.split(/\s+/);
+          wordsArray.forEach(function (key) {
+            if (wordsMap.hasOwnProperty(key)) {
+              wordsMap[key]++;
+            } else {
+              wordsMap[key] = 1;
+            }
+          });
 
-    for (let i = 0; i < keywordsArray.length; i++) {
-      let wordCount = 0;
-      const keyword = keywordsArray[i];
-      for (let j = 0; j < textArray.length; j++) {
-        const str = textArray[j];
-        console.log("*******************************************");
-        // console.log("str", str);
-        // console.log("keyword ", keyword);
-        const wordsMap = {};
-        const wordsArray = str.split(/\s+/);
-        wordsArray.forEach(function (key) {
-          if (wordsMap.hasOwnProperty(key)) {
-            wordsMap[key]++;
-          } else {
-            wordsMap[key] = 1;
+          console.log("wordsMap: ", wordsMap)
+
+          if (wordsMap.hasOwnProperty(keyword)) {
+            texts.push(str);
+            wordCount = wordCount + 1;
           }
-        });
 
-        console.log("wordsMap: ", wordsMap)
-
-        if (wordsMap.hasOwnProperty(keyword)) {
-          texts.push(str);
-          wordCount = wordCount + 1;
         }
 
-      }
+        if(texts.length === 0) {
+          texts.push("No matching text found");
+        }
 
-      relevantTextArrayObj = {
-        word: keyword,
-        wordCount: wordCount,
-        texts: texts
-      }
+        relevantTextArrayObj = {
+          word: keyword,
+          wordCount: wordCount,
+          texts: texts
+        }
 
-      console.log("relevantTextArrayObj: ", relevantTextArrayObj)
-      relevantTextArray.push(relevantTextArrayObj);
+        console.log("relevantTextArrayObj: ", relevantTextArrayObj)
+        relevantTextArray.push(relevantTextArrayObj);
+      }
+      console.log("relevantTextArray:  ", relevantTextArray);
+      res.json(relevantTextArray);
+    } else {
+      res.json(textArray);
     }
-    console.log("relevantTextArray:  ", relevantTextArray);
-    res.json(relevantTextArray);
   });
 }
 
