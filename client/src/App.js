@@ -7,7 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
 import AppBar from 'material-ui/AppBar';
 
-import { Card, CardActions, CardTitle } from 'material-ui/Card';
+import { Card, CardActions, CardTitle, CardText } from 'material-ui/Card';
 
 import TextField from 'material-ui/TextField';
 
@@ -15,9 +15,9 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
       websiteText: [],
-      url: "http://www.theglitch.in/index.php/",
+      url: "http://www.ema.europa.eu/ema/",
       showEmptyFieldWarning: false
     };
     this.setURl = this.setURl.bind(this);
@@ -34,8 +34,8 @@ class App extends Component {
   }
 
   fetchSiteData = () => {
-    if(this.state.url.length === 0 ) {
-      if(this.state.showEmptyFieldWarning === false) {
+    if (this.state.url.length === 0) {
+      if (this.state.showEmptyFieldWarning === false) {
         this.setState({
           showEmptyFieldWarning: true
         });
@@ -48,18 +48,18 @@ class App extends Component {
     }
 
     axios.post(`/siteData`, { urlData })
-    .then(res => {
-      // console.log(res);
-      console.log(res.data);
-      this.setState({ websiteText: res.data })
-    })  
-    .catch(function (error) {
-      console.log(error);
-    });
+      .then(res => {
+        // console.log(res);
+        console.log(res.data);
+        this.setState({ websiteText: res.data })
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
 
   onSnackbarClose = () => {
-    if(this.state.showEmptyFieldWarning === true) {
+    if (this.state.showEmptyFieldWarning === true) {
       this.setState({
         showEmptyFieldWarning: false
       });
@@ -79,33 +79,44 @@ class App extends Component {
           <Card
             className="url-input-card"
           >
-            <CardTitle title="Enter a site to scrape data from."/>
+            <CardTitle title="Enter a site to scrape data from." />
             <TextField
-              defaultValue="http://www.theglitch.in/index.php/"
+              defaultValue="http://www.ema.europa.eu/ema/"
               className="url-text-field"
               onChange={this.setURl}
             />
             <CardActions>
-              <RaisedButton label="Scrape" 
-              onClick={() => {this.fetchSiteData()}}/>
+              <RaisedButton label="Scrape"
+                onClick={() => { this.fetchSiteData() }} />
             </CardActions>
           </Card>
 
-          {!this.state.websiteText.hasOwnProperty('error') ? this.state.websiteText.map((text_arr, index) =>        
-            <Card  key={index}
+          {!this.state.websiteText.hasOwnProperty('error') ? this.state.websiteText.map((text_arr, index) =>
+            <Card key={index}
               className="url-input-card"
             >
-              <CardTitle title={text_arr.text}/>
-              
+              <CardTitle title={"Keyword: " + text_arr.word} />
+              <CardText>{"Total Count: " + text_arr.wordCount}</CardText>
+
+              <CardText>{"List of texts containing this keyword: "}</CardText>
+
+              {text_arr.hasOwnProperty('texts') ? text_arr.texts.map((text, index) =>
+                <Card key={index}
+                  className="url-input-card2"
+                >
+                  <CardText>{text}</CardText>
+                </Card>
+              ) : null}
+
             </Card>
           ) : null}
 
-          {this.state.websiteText.hasOwnProperty('error') ?       
+          {this.state.websiteText.hasOwnProperty('error') ?
             <Card className="url-input-card" >
-              <CardTitle title={this.state.websiteText.message}/>
+              <CardTitle title={this.state.websiteText.text} />
             </Card>
-           : null}
-          
+            : null}
+
           <Snackbar
             open={this.state.showEmptyFieldWarning}
             message="Please enter a vaid URL"

@@ -3,7 +3,7 @@
 }
 
 .app-bar {
-  background-color: rgb(0, 188, 0) !important;
+  background-color: rgba(0, 0, 0, 1) !important;
 }
 
 .url-input-card {
@@ -11,6 +11,12 @@
   margin-left: 25%;
   margin-top: 20px;
   margin-bottom: 20px;
+  padding: 10px;
+}
+
+.url-input-card2 {
+  margin: 10px 0;
+  font-size: 16px !important;
 }
 
 .url-text-field {
