@@ -56,14 +56,14 @@ scrapeWebsite2 = (req, res, next) => {
     if (keywordsArray.length > 0) {
       for (let i = 0; i < keywordsArray.length; i++) {
         let wordCount = 0;
-        const keyword = keywordsArray[i];
+        const keyword = keywordsArray[i].toLowerCase();
         for (let j = 0; j < textArray.length; j++) {
           const str = textArray[j];
           console.log("*******************************************");
           // console.log("str", str);
           // console.log("keyword ", keyword);
           const wordsMap = {};
-          const wordsArray = str.split(/\s+/);
+          const wordsArray = str.toLowerCase().split(/\s+/);
           wordsArray.forEach(function (key) {
             if (wordsMap.hasOwnProperty(key)) {
               wordsMap[key]++;

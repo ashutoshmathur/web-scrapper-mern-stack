@@ -19,7 +19,7 @@ class App extends Component {
       websiteText: [],
       url: "http://www.ema.europa.eu/ema/",
       showEmptyFieldWarning: false,
-      keywords: ["European"]
+      keywords: ["Health"]
     };
     this.setURl = this.setURl.bind(this);
     this.fetchSiteData = this.fetchSiteData.bind(this);

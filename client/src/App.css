@@ -1,5 +1,9 @@
 .app {
-  background-color: #fff;
+  background-color: #c1c1c1;
+  padding-bottom: 10px;
+  position: absolute;
+  min-width: 100%;
+  min-height: 100%;
 }
 
 .app-bar {
